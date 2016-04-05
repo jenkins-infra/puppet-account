@@ -221,9 +221,9 @@ define account(
     validate_hash($ssh_keys)
 
     $defaults = {
-      ensure => $ensure,
-      user   => $username,
-      type => 'ssh-rsa',
+      'ensure' => $ensure,
+      'user'   => $username,
+      'type'   => 'ssh-rsa',
     }
 
     create_resources(
