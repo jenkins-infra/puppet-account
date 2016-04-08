@@ -37,7 +37,7 @@
 #   Whether the underlying user resource should manage the home directory.
 #   This setting only determines whether or not puppet will copy /etc/skel.
 #   Regardless of its value, at minimum, a home directory and a $HOME/.ssh
-#   directory will be created. Defaults to true.
+#   directory will be created. Defaults to false.
 #
 # [*home_dir*]
 #   The location of the user's home directory.
@@ -103,7 +103,7 @@
 #
 define account(
   $username = $title, $password = '!', $shell = '/bin/bash',
-  $manage_home = true, $home_dir = undef,  $home_dir_perms = '0750',
+  $manage_home = false, $home_dir = undef,  $home_dir_perms = '0750',
   $create_group = true, $system = false, $uid = undef, $ssh_key = undef,
   $ssh_key_type = 'ssh-rsa', $groups = [], $ensure = present,
   $comment = "${title} Puppet-managed User", $gid = 'users', $allowdupe = false,
