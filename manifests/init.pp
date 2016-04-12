@@ -174,18 +174,19 @@ define account(
 
   user {
     $title:
-      ensure     => $ensure,
-      name       => $username,
-      comment    => $comment,
-      uid        => $uid,
-      password   => $password,
-      shell      => $shell,
-      gid        => $primary_group,
-      groups     => $groups,
-      home       => $home_dir_real,
-      managehome => $manage_home,
-      system     => $system,
-      allowdupe  => $allowdupe,
+      ensure         => $ensure,
+      name           => $username,
+      comment        => $comment,
+      uid            => $uid,
+      password       => $password,
+      shell          => $shell,
+      gid            => $primary_group,
+      groups         => $groups,
+      home           => $home_dir_real,
+      managehome     => $manage_home,
+      system         => $system,
+      allowdupe      => $allowdupe,
+      purge_ssh_keys => true,
   }
 
   file {
