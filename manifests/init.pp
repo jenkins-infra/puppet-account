@@ -202,7 +202,8 @@ define account(
       path    => "${home_dir_real}/.ssh",
       owner   => $dir_owner,
       group   => $dir_group,
-      mode    => '0700';
+      mode    => '0700',
+      require => File["${title}_home"];
   }
 
   if $ssh_key != undef {
@@ -210,11 +211,12 @@ define account(
 
     ssh_authorized_key {
       $title:
-        ensure => $ensure,
-        type   => $ssh_key_type,
-        name   => "${title} SSH Key",
-        user   => $username,
-        key    => $ssh_key,
+        ensure  => $ensure,
+        type    => $ssh_key_type,
+        name    => "${title} SSH Key",
+        user    => $username,
+        key     => $ssh_key,
+        require => File["${title}_sshdir"],
     }
   }
 
@@ -222,9 +224,10 @@ define account(
     validate_hash($ssh_keys)
 
     $defaults = {
-      'ensure' => $ensure,
-      'user'   => $username,
-      'type'   => 'ssh-rsa',
+      'ensure'  => $ensure,
+      'user'    => $username,
+      'type'    => 'ssh-rsa',
+      'require' => File["${title}_sshdir"],
     }
 
     create_resources(
