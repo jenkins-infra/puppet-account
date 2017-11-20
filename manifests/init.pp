@@ -114,6 +114,7 @@ define account(
   $manage_home = false, $home_dir = undef,  $home_dir_perms = '0750',
   $create_group = true, $system = false, $uid = undef, $ssh_key = undef,
   $ssh_key_type = 'ssh-rsa', $groups = [], $ensure = present, $purge = false,
+  $ssh_keys = undef,
   $comment= "${title} Puppet-managed User", $gid = 'users', $allowdupe = false
 ) {
 
