@@ -43,11 +43,19 @@
 #   The location of the user's home directory.
 #   Defaults to "/home/$title".
 #
+# [*home_dir_perms*]
+#   The permissions set on the home directory.
+#   Defaults to 0750
+#
 # [*create_group*]
 #   Whether or not a dedicated group should be created for this user.
 #   If set, a group with the same name as the user will be created.
 #   Otherwise, the user's primary group will be set to "users".
 #   Defaults to true.
+#
+# [*purge*]
+#   Whether the user's home and ssh directories should be forcibly removed
+#   when set to absent
 #
 # [*groups*]
 #   An array of additional groups to add the user to.
@@ -105,9 +113,8 @@ define account(
   $username = $title, $password = '!', $shell = '/bin/bash',
   $manage_home = false, $home_dir = undef,  $home_dir_perms = '0750',
   $create_group = true, $system = false, $uid = undef, $ssh_key = undef,
-  $ssh_key_type = 'ssh-rsa', $groups = [], $ensure = present,
-  $comment = "${title} Puppet-managed User", $gid = 'users', $allowdupe = false,
-  $ssh_keys = undef
+  $ssh_key_type = 'ssh-rsa', $groups = [], $ensure = present, $purge = false,
+  $comment= "${title} Puppet-managed User", $gid = 'users', $allowdupe = false
 ) {
 
   if $home_dir == undef {
@@ -195,6 +202,7 @@ define account(
       path    => $home_dir_real,
       owner   => $dir_owner,
       group   => $dir_group,
+      force   => $purge,
       mode    => $home_dir_perms;
 
     "${title}_sshdir":
@@ -202,8 +210,8 @@ define account(
       path    => "${home_dir_real}/.ssh",
       owner   => $dir_owner,
       group   => $dir_group,
-      mode    => '0700',
-      require => File["${title}_home"];
+      force   => $purge,
+      mode    => '0700';
   }
 
   if $ssh_key != undef {
@@ -211,12 +219,11 @@ define account(
 
     ssh_authorized_key {
       $title:
-        ensure  => $ensure,
-        type    => $ssh_key_type,
-        name    => "${title} SSH Key",
-        user    => $username,
-        key     => $ssh_key,
-        require => File["${title}_sshdir"],
+        ensure => $ensure,
+        type   => $ssh_key_type,
+        name   => "${title} SSH Key",
+        user   => $username,
+        key    => $ssh_key,
     }
   }
 

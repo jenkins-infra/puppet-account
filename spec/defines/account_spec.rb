@@ -10,7 +10,7 @@ describe 'account' do
         'name'   => title,
         'system' => false,
         'gid'    => nil,
-        'before' => "User[#{title}]",
+        'before' => ["User[#{title}]"],
       })
     end
 
@@ -27,7 +27,7 @@ describe 'account' do
         'managehome' => true,
         'system'     => false,
         'allowdupe'  => false,
-        'before'     => "File[#{title}_home]",
+        'before'     => ["File[#{title}_home]"],
       })
     end
 
@@ -38,7 +38,8 @@ describe 'account' do
         'owner'   => title,
         'group'   => title,
         'mode'    => '0750',
-        'before'  => "File[#{title}_sshdir]",
+        'before'  => ["File[#{title}_sshdir]"],
+        'force'   => false,
       })
     end
 
@@ -49,6 +50,7 @@ describe 'account' do
         'owner'   => title,
         'group'   => title,
         'mode'    => '0700',
+        'force'   => false,
       })
     end
   end
@@ -64,6 +66,7 @@ describe 'account' do
       :system         => true,
       :uid            => 777,
       :allowdupe      => true,
+      :purge          => true,
       :groups         => [ 'sudo', 'users' ],
     }}
 
@@ -95,6 +98,7 @@ describe 'account' do
         'owner' => params[:username],
         'group' => params[:username],
         'mode'  => params[:home_dir_perms],
+        'force' => true,
       })
     end
 
@@ -103,6 +107,7 @@ describe 'account' do
         'path' => "#{params[:home_dir]}/.ssh",
         'owner' => params[:username],
         'group' => params[:username],
+        'force' => true,
       })
     end
   end
